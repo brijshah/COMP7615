@@ -40,6 +40,7 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
+				<!-- TITLE SLIDE -->
 				<section>
 					<h1>manipulating pixel colors in image media</h1>
 					<!--<h3>BRIJ SHAH & CALLUM STYAN</h3> -->
@@ -48,38 +49,12 @@
 					</p>
 				</section>
 
+				<!-- GRAYSCALE TITLE SLIDE -->
 				<section data-transition="slide" data-background="#ABB7B7" data-background-transition="zoom">
 					<h2>grayscale</h2>
-					<!--<p>
-						reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
-					</p> -->
 				</section>
 
-				<!-- Example of nested vertical slides -->
-				<!--<section>
-					<section>
-						<h2>Vertical Slides</h2>
-						<p>Slides can be nested inside of each other.</p>
-						<p>Use the <em>Space</em> key to navigate through all slides.</p>
-						<br>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					 <section>
-						<h2>Basement Level 1</h2>
-						<p>Nested slides are useful for adding additional detail underneath a high level horizontal slide.</p>
-					</section>
-					<section>
-						<h2>Basement Level 2</h2>
-						<p>That's it, time to go back up.</p>
-						<br>
-						<a href="#/2">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-						</a>
-					</section>
-				</section> -->
-
+				<!-- OBJECTIVE/PROBLEM SLIDE -->
 				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
 					<h2>objective/problem</h2>
 					<p style="text-align:left">objective:</p>
@@ -87,17 +62,14 @@
 						<li style="text-align:left">modifying & creating images</li>
 						<li style="text-align:left">change colors within an image</li>
 					</ul>
-					<p style="text-align:left"> </p>
-
-					<p style="text-align:left"> </p>
 
 					<p style="text-align:left">problem:</p>
 					<ul>
 						<li style="text-align:left">images need to be modified</li>
-						<li style="text-align:left">text</li>
 					</ul>
 				</section>
 
+				<!-- TECHNICAL IMPLEMENTATION SLIDE -->
 				<section data-transition="slide" data-background="#3498db" data-background-transition="zoom">
 					<h2>technical implementation</h2>
 					<ul>
@@ -108,6 +80,7 @@
 					</ul>
 				</section>
 
+				<!-- COMPUTING TECHNIQUE SLIDE -->
 				<section data-transition="slide" data-background="#FDE3A7" data-background-transition="zoom">
 					<h2>computing techniques</h2>
 					<ul>
@@ -118,10 +91,12 @@
 					</ul>
 				</section>
 
+				<!-- CODE WALK-THROUGH SLIDE -->
 				<section data-transition="slide" data-background="#EB974E" data-background-transition="zoom">
 					<h2>code walk-thru</h2>
 				</section>
 
+				<!-- CONVERT SLIDE -->
 				<section>
 				<p>convert</p>
 					<pre><code data-trim contenteditable>
@@ -129,6 +104,8 @@
 im = Image.open("original.jpg").convert('L')
 im.save('greyscale.jpg’)
 					</code></pre>
+
+				<!-- SOLARIZE SLIDE -->
 				<p>solarize</p>
 					<pre><code data-trim contenteditable>
 # is solarize(0) the same as invert
@@ -138,10 +115,12 @@ solarizeTest.save('solarizeTest.jpg’)
 					</code></pre>
 				</section>
 
+				<!-- EXAMPLES SLIDE -->
 				<section data-transition="slide" data-background="#446CB3" data-background-transition="zoom">
 					<h2>examples</h2>
 				</section>
 
+				<!-- GOOD IMAGE SLIDE -->
 				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
 					<h2>'good'</h2>
 					<p>original</p>
@@ -151,15 +130,17 @@ solarizeTest.save('solarizeTest.jpg’)
 
 				</section>
 
-				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
-					<p>greyscale</p>
+				<!-- GOOD GRAYSCALE IMAGE SLIDE -->
+				<section data-transition="slide" data-background="#9b59b6" data-background-transition="zoom">
+					<p>grayscale</p>
 					<p>
                         <img src="greyscale_cat.jpg" style="border:none; background:none; box-shadow:none;">
                     </p>
 
 				</section>
 
-				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+				<!-- NOT SO GOOD IMAGE SLIDE -->
+				<section data-transition="slide" data-background="#C0392B" data-background-transition="zoom">
 					<h2>'not so good'</h2>
 					<p>original</p>
 					<p>
@@ -168,15 +149,17 @@ solarizeTest.save('solarizeTest.jpg’)
 
 				</section>
 
-				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
-					<p>greyscale</p>
+				<!-- NOT SO GOOD GRAYSCALE IMAGE SLIDE -->
+				<section data-transition="slide" data-background="#A2DED0" data-background-transition="zoom">
+					<p>grayscale</p>
 					<p>
                         <img src="greyscale_vader.jpg" style="border:none; background:none; box-shadow:none;">
                     </p>
 
 				</section>
 
-				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+				<!-- EXTRAS SLIDE -->
+				<section data-transition="slide" data-background="#F27935" data-background-transition="zoom">
 					<h2>extras</h2>
 					<p>GIFS?!?!?!?!?!</p>
 					<p>
@@ -185,11 +168,12 @@ solarizeTest.save('solarizeTest.jpg’)
 
 				</section>
 				
-
+				<!-- CONCLUSION SLIDE -->
 				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
 					<h2>conclusions</h2>
 				</section>
 
+				<!-- LIMITATION SLIDE -->
 				<section data-transition="slide" data-background="#e74c3c" data-background-transition="zoom">
 					<h2>limitations</h2>
 					<p>
@@ -197,6 +181,7 @@ solarizeTest.save('solarizeTest.jpg’)
 					</p>
 				</section>
 
+				<!-- END SLIDE -->
 				<section data-transition="slide" data-background="#446CB3" data-background-transition="zoom">
 					<h2>the end.</h2>
 				</section>
