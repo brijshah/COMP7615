@@ -48,7 +48,7 @@
 					</p>
 				</section>
 
-				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+				<section data-transition="slide" data-background="#ABB7B7" data-background-transition="zoom">
 					<h2>grayscale</h2>
 					<!--<p>
 						reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
@@ -83,95 +83,121 @@
 				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
 					<h2>objective/problem</h2>
 					<p style="text-align:left">objective:</p>
-
+					<ul>
+						<li style="text-align:left">modifying & creating images</li>
+						<li style="text-align:left">change colors within an image</li>
+					</ul>
 					<p style="text-align:left"> </p>
 
 					<p style="text-align:left"> </p>
 
 					<p style="text-align:left">problem:</p>
+					<ul>
+						<li style="text-align:left">images need to be modified</li>
+						<li style="text-align:left">text</li>
+					</ul>
 				</section>
 
 				<section data-transition="slide" data-background="#3498db" data-background-transition="zoom">
 					<h2>technical implementation</h2>
 					<ul>
-						<li style="text-align:left">our solution uses a library for python called 'PIL'</li>
+						<li style="text-align:left">our solution uses a library for python called 'pillow'</li>
 						<li style="text-align:left">allows us to open, manipulate, save many different image formats</li>
 						<li style="text-align:left">PIL = python image library</li>
+						<li style="text-align:left">pillow builds ontop of PIL, PIL is deprecated</li>
 					</ul>
 				</section>
 
 				<section data-transition="slide" data-background="#FDE3A7" data-background-transition="zoom">
 					<h2>computing techniques</h2>
 					<ul>
-						<li>.convert</li>
-						<li>.save</li>
-						<li>.show</li>
-						<li>.filter</li>
+						<li>.convert - changes the mode of an image, for example, RGB to Luminance</li>
+						<li>.save - stores the image with the modified pixel values and correct filetype header</li>
+						<li>.invert - takes the value of each color and subtracts the original color value from 255 and saves the result</li>
+						<li>.solarize - inverts all colors above a certain threshold value</li>
 					</ul>
 				</section>
 
-				<section>
+				<section data-transition="slide" data-background="#EB974E" data-background-transition="zoom">
 					<h2>code walk-thru</h2>
 				</section>
 
 				<section>
+				<p>convert</p>
 					<pre><code data-trim contenteditable>
-static PyObject* 
-_convert(ImagingObject* self, PyObject* args)
-{
-    char* mode;
-    int dither = 0;
-    ImagingObject *paletteimage = NULL;
-
-    if (!PyArg_ParseTuple(args, "s|iO", &mode, &dither, &paletteimage))
-	return NULL;
-    if (paletteimage != NULL) {
-      if (!PyImaging_Check(paletteimage)) {
-	PyObject_Print((PyObject *)paletteimage, stderr, 0);
-	PyErr_SetString(PyExc_ValueError, "palette argument must be image with mode 'P'");
-	return NULL;
-      }
-      if (paletteimage->image->palette == NULL) {
-	PyErr_SetString(PyExc_ValueError, "null palette");
-	return NULL;
-      }
-    }
-
-    return PyImagingNew(ImagingConvert(self->image, mode, paletteimage ? paletteimage->image->palette : NULL, dither));
-}
+# convert image to greyscale (Luminance)
+im = Image.open("original.jpg").convert('L')
+im.save('greyscale.jpg’)
+					</code></pre>
+				<p>solarize</p>
+					<pre><code data-trim contenteditable>
+# is solarize(0) the same as invert
+im = Image.open(“original.jpg")
+solarizeTest = ImageOps.solarize(im, threshold=0)
+solarizeTest.save('solarizeTest.jpg’)
 					</code></pre>
 				</section>
 
-				<section>
+				<section data-transition="slide" data-background="#446CB3" data-background-transition="zoom">
 					<h2>examples</h2>
 				</section>
 
-				<section>
-				<div class="sl-block" data-block-type="text" style="width: 430px; left: 23px; top: 87px; height: auto;" data-block-id="bfd60236d2b7db299c8de210cb20c556">
-					<div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="good" style="text-align: left;"><h2>'good'</h2></div></div>
-				<div class="sl-block" data-block-type="text" style="width: 430px; left: 23px; top: 161px; height: auto;" data-block-id="fdd85759863ac7982f739d513bdf2616"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec metus justo. Aliquam erat volutpat." style="z-index: 13; text-align: left;"><p>put some text here???</p></div></div>
-				<div class="sl-block" data-block-type="image" style="width: 454px; height: 641px; left: 479px; top: 29px;" data-block-id="8637e7b072bfe00b3d7ea15ef09d824e"><div class="sl-block-content"></div></div>
+				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+					<h2>'good'</h2>
+					<p>original</p>
+					<p>
+                        <img src="original_cat.jpg" style="border:none; background:none; box-shadow:none;">
+                    </p>
+
 				</section>
 
-				<section>
-				<div class="sl-block" data-block-type="text" style="width: 430px; left: 23px; top: 87px; height: auto;" data-block-id="bfd60236d2b7db299c8de210cb20c556">
-					<div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="not so good" style="text-align: left;"><h2>'not so good'</h2></div></div>
-				<div class="sl-block" data-block-type="text" style="width: 430px; left: 23px; top: 161px; height: auto;" data-block-id="fdd85759863ac7982f739d513bdf2616"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec metus justo. Aliquam erat volutpat." style="z-index: 13; text-align: left;"><p>put some text here???</p></div></div>
-				<div class="sl-block" data-block-type="image" style="width: 454px; height: 641px; left: 479px; top: 29px;" data-block-id="8637e7b072bfe00b3d7ea15ef09d824e"><div class="sl-block-content"></div></div>
+				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+					<p>greyscale</p>
+					<p>
+                        <img src="greyscale_cat.jpg" style="border:none; background:none; box-shadow:none;">
+                    </p>
+
 				</section>
 
-				<section>
+				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+					<h2>'not so good'</h2>
+					<p>original</p>
+					<p>
+                        <img src="original_vader.jpg" style="border:none; background:none; box-shadow:none;">
+                    </p>
+
+				</section>
+
+				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+					<p>greyscale</p>
+					<p>
+                        <img src="greyscale_vader.jpg" style="border:none; background:none; box-shadow:none;">
+                    </p>
+
+				</section>
+
+				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
+					<h2>extras</h2>
+					<p>GIFS?!?!?!?!?!</p>
+					<p>
+                        <img src="cat.gif" style="border:none; background:none; box-shadow:none;">
+                    </p>
+
+				</section>
+				
+
+				<section data-transition="slide" data-background="#81CFE0" data-background-transition="zoom">
 					<h2>conclusions</h2>
 				</section>
 
-				<section>
+				<section data-transition="slide" data-background="#e74c3c" data-background-transition="zoom">
 					<h2>limitations</h2>
 					<p>
-						put text here swagins
+						Using the pillow library limits the image manipulation functions it implements
 					</p>
 				</section>
 
-				<section>
+				<section data-transition="slide" data-background="#446CB3" data-background-transition="zoom">
 					<h2>the end.</h2>
 				</section>
 			</div>
@@ -185,6 +211,7 @@ _convert(ImagingObject* self, PyObject* args)
 			// Full list of configuration options available at:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
+				width: '100%',
 				controls: true,
 				progress: true,
 				history: true,
