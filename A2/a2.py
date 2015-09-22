@@ -1,19 +1,48 @@
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
-import os, sys
+import os, sys, getopt
 
 FONT = 'Arial.ttf'
+global manipType
+global imagePath
+manipType = 0
+imagePath = 0
 
 #rotate
-#im = Image.open("abc.jpg")
-#im2 = im.rotate(90)
-#im2.show()
-#im2.save("def.gif")
-
+def rotate(path):
+    im = Image.open(path)
+    im2 = im.rotate(90)
+    im2.save('rotate.jpg')
 
 #mirroring
-#img = Image.open("abc.jpg")
-#img_flipped = img.transpose(Image.FLIP_LEFT_RIGHT)
-#img_flipped.show()
+def mirroring(path):
+    im = Image.open(path)
+    im_flipped = im.transpose(Image.FLIP_LEFT_RIGHT)
+    im_flipped.save('mirror.jpg')
+
+def add_watermark(path, text, angle=23, opacity=0.75):
+    im = Image.open(path).convert('RGB')
+    watermark = Image.new('RGBA', im.size, (0,0,0,0))
+
+    size = 5
+    font = ImageFont.truetype(FONT, size)
+    width, height = font.getsize(text)
+
+    while width + height < watermark.size[0]:
+        size += 5
+        font = ImageFont.truetype(FONT,size)
+        width, height = font.getsize(text)
+
+    draw = ImageDraw.Draw(watermark, 'RGBA')
+    draw.text(((watermark.size[0] - width) / 2,
+              (watermark.size[1] - height) / 2),
+              text, font=font)
+
+    watermark = watermark.rotate(angle, Image.BICUBIC)
+
+    alpha = watermark.split()[3]
+    alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
+    watermark.putalpha(alpha)
+    Image.composite(watermark, im, watermark).save('watermark.jpg') 
 
 #Watermark
 #in_file(input image)
@@ -21,37 +50,62 @@ FONT = 'Arial.ttf'
 #out_file(output image name)
 #angle(angle of watermark)
 #opacity(default value of opacity)
-def add_watermark(in_file, text, out_file='watermark.jpg', angle=23, opacity=0.75):
-	#open file and create watermark image of the same size as input image
-    img = Image.open(in_file).convert('RGB')
+def add_watermark(path, text, angle=23, opacity=0.75):
+    img = Image.open(path).convert('RGB')
     watermark = Image.new('RGBA', img.size, (0,0,0,0))
-    #set a default value of text size, create text, get width and height of text
     size = 2
-    n_font = ImageFont.truetype(FONT, size)
-    n_width, n_height = n_font.getsize(text)
+    font = ImageFont.truetype(FONT, size)
+    width, height = font.getsize(text)
 
-    #while incrementing font size, search text length that doesnt exceed image dimensions
-    while n_width+n_height < watermark.size[0]:
+    while width + height < watermark.size[0]:
         size += 2
-        n_font = ImageFont.truetype(FONT, size)
-        n_width, n_height = n_font.getsize(text)
-    #obtain proper font size and draw watermark onto center of image
+        font = ImageFont.truetype(FONT, size)
+        width, height = font.getsize(text)
+
     draw = ImageDraw.Draw(watermark, 'RGBA')
-    draw.text(((watermark.size[0] - n_width) / 2,
-              (watermark.size[1] - n_height) / 2),
-              text, font=n_font)
-    #default angle is set at 23, angle is set here using BICUBIC algo
+    draw.text(((watermark.size[0] - width) / 2,
+              (watermark.size[1] - height) / 2),
+              text, font=font)
+
     watermark = watermark.rotate(angle,Image.BICUBIC)
-    #using alpha, reduce opacity of watermark(reducing brightness and contrast)
-    #default value is .75
     alpha = watermark.split()[3]
     alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
     watermark.putalpha(alpha)
-    #merge watermark image with original and save
-    Image.composite(watermark, img, watermark).save(out_file, 'JPEG')
+    Image.composite(watermark, img, watermark).save('watermark.jpg')
+
+def main(argv):
+    global manipType
+    global imagePath
+    print argv
+
+    try:
+        opts, args = getopt.getopt(argv, "t:p:h", ["type=", "path=", "help"])
+    except getopt.GetoptError:
+        sys.exit(2)
+
+    if len(sys.argv) < 2:
+        print 'Usage: a2.py -t <type> -p <path> or --help'
+        sys.exit()
+
+    for opt, arg in opts:
+        if opt in ("h", "--help"):
+            print 'a2.py -t <type> -p <path>'
+            print 'Type can be r (rotate), m (mirroring), w (watermark) or c (chroma)'
+            print 'Please provide the absolute path to image'
+            sys.exit()
+        elif opt in ("-t", "--type"):
+            manipType = arg
+        elif opt in ("p", "--path"):
+            imagePath = arg
+
+    if manipType == 'r':
+        rotate(imagePath)
+    elif manipType == 'm':
+        mirroring(imagePath)
+    elif manipType == 'w':
+        watermark(imagePath)
+    else:
+        print 'Invalid type, try --help.'
  
 if __name__ == '__main__':
-	if len(sys.argv) < 3:
-	    sys.exit('Usage: %s <input-image> <text> <output-image> ' \
-	             '<angle> <opacity> ' % os.path.basename(sys.argv[0]))
-	add_watermark(*sys.argv[1:])
+    main(sys.argv[1:])
