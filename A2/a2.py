@@ -19,6 +19,7 @@ def mirroring(path):
     im_flipped = im.transpose(Image.FLIP_LEFT_RIGHT)
     im_flipped.save('mirror.jpg')
 
+#watermark
 def add_watermark(path, text, angle=23, opacity=0.75):
     im = Image.open(path).convert('RGB')
     watermark = Image.new('RGBA', im.size, (0,0,0,0))
@@ -42,36 +43,7 @@ def add_watermark(path, text, angle=23, opacity=0.75):
     alpha = watermark.split()[3]
     alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
     watermark.putalpha(alpha)
-    Image.composite(watermark, im, watermark).save('watermark.jpg') 
-
-#Watermark
-#in_file(input image)
-#text(watermark text to be applied)
-#out_file(output image name)
-#angle(angle of watermark)
-#opacity(default value of opacity)
-def add_watermark(path, text, angle=23, opacity=0.75):
-    img = Image.open(path).convert('RGB')
-    watermark = Image.new('RGBA', img.size, (0,0,0,0))
-    size = 2
-    font = ImageFont.truetype(FONT, size)
-    width, height = font.getsize(text)
-
-    while width + height < watermark.size[0]:
-        size += 2
-        font = ImageFont.truetype(FONT, size)
-        width, height = font.getsize(text)
-
-    draw = ImageDraw.Draw(watermark, 'RGBA')
-    draw.text(((watermark.size[0] - width) / 2,
-              (watermark.size[1] - height) / 2),
-              text, font=font)
-
-    watermark = watermark.rotate(angle,Image.BICUBIC)
-    alpha = watermark.split()[3]
-    alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
-    watermark.putalpha(alpha)
-    Image.composite(watermark, img, watermark).save('watermark.jpg')
+    Image.composite(watermark, im, watermark).save('watermark.jpg')
 
 def main(argv):
     global manipType
@@ -103,7 +75,7 @@ def main(argv):
     elif manipType == 'm':
         mirroring(imagePath)
     elif manipType == 'w':
-        watermark(imagePath)
+        watermark(imagePath, 'text')
     else:
         print 'Invalid type, try --help.'
  
