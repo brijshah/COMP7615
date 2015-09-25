@@ -4,8 +4,10 @@ import os, sys, getopt
 FONT = 'Arial.ttf'
 global manipType
 global imagePath
+global blueBackground
 manipType = 0
 imagePath = 0
+blueBackground = (3, 52, 103)
 
 #rotate
 def rotate(path):
@@ -45,6 +47,43 @@ def add_watermark(path, text, angle=23, opacity=0.75):
     watermark.putalpha(alpha)
     Image.composite(watermark, im, watermark).save('watermark.jpg')
 
+# checks to see if two colours are similar to eachother by adding the difference
+# between all the RGB values, used for reverseChromaKey
+def matchColours(pixelColour, matchToColour):
+  if (abs(pixelColour[0] - matchToColour[0]) +
+      abs(pixelColour[1] - matchToColour[1]) +
+      abs(pixelColour[0] - matchToColour[0]) < 36):
+    return True
+
+
+# like chroma key, except we're keeping the same background and modifying all
+# the other colours, we're going to use this to create the nyancat gif where
+# only the cat and rainbow change colours
+def reverseChromaKey(image):
+  global blueBackground
+  global white
+  global black
+
+  baseImage = Image.open(image)
+  pixels = list(baseImage.getdata())
+
+  # loop through all pixels
+  count = 0
+  for pixel in pixels:
+    # check if the pixel is a background pixel
+    if matchColours(pixel, blueBackground):
+      count = count + 1
+      continue
+    else:
+      # invert
+      pixels[count] = (255 - pixel[0], 255 - pixel[1], 255 - pixel[2])
+      count = count + 1
+
+  # end of loop, write the new pixel data to the image
+  newImage = Image.new('RGB', (baseImage.size[0], baseImage.size[1]), (255, 255, 255))
+  newImage.putdata(pixels)
+  newImage.save('reverseChromaKey.jpg')
+
 def main(argv):
     global manipType
     global imagePath
@@ -67,7 +106,7 @@ def main(argv):
             sys.exit()
         elif opt in ("-t", "--type"):
             manipType = arg
-        elif opt in ("p", "--path"):
+        elif opt in ("-p", "--path"):
             imagePath = arg
 
     if manipType == 'r':
@@ -76,8 +115,10 @@ def main(argv):
         mirroring(imagePath)
     elif manipType == 'w':
         watermark(imagePath, 'text')
+    elif manipType == 'c':
+        reverseChromaKey(imagePath)
     else:
         print 'Invalid type, try --help.'
- 
+
 if __name__ == '__main__':
     main(sys.argv[1:])
