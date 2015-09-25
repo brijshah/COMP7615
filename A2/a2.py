@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 import os, sys, getopt
 
+#Globals
 FONT = 'Arial.ttf'
 global manipType
 global imagePath
@@ -10,41 +11,56 @@ imagePath = 0
 blueBackground = (3, 52, 103)
 
 #rotate
+#loads an image with a user given path and returns a copy of
+#the image rotated the given number of degrees counter clckwise around
+#its centre.
 def rotate(path):
     im = Image.open(path)
     im2 = im.rotate(90)
     im2.save('rotate.jpg')
 
 #mirroring
+#loads an image with a user given path and returns a copy of
+#the image flipped or rotated.
 def mirroring(path):
     im = Image.open(path)
     im_flipped = im.transpose(Image.FLIP_LEFT_RIGHT)
     im_flipped.save('mirror.jpg')
 
 #watermark
+#loads a user given path, and adds a watermark layer on top
+#of a copy of the image using system font.
 def add_watermark(path, text, angle=23, opacity=0.75):
+	#open the input file and create watermark image of similar dimensions
     im = Image.open(path).convert('RGB')
     watermark = Image.new('RGBA', im.size, (0,0,0,0))
 
+    #initialize size of font and create text by obtaining height and width
     size = 5
     font = ImageFont.truetype(FONT, size)
     width, height = font.getsize(text)
 
+    #by incrementing font size, we search for text that wont exceed image size
     while width + height < watermark.size[0]:
         size += 5
         font = ImageFont.truetype(FONT,size)
         width, height = font.getsize(text)
 
+    #obtain correct font size and draw text onto center of watermark image
     draw = ImageDraw.Draw(watermark, 'RGBA')
     draw.text(((watermark.size[0] - width) / 2,
               (watermark.size[1] - height) / 2),
               text, font=font)
 
+    #rotate image by default angle, using BICUBIC algorithm
     watermark = watermark.rotate(angle, Image.BICUBIC)
 
+    #alpha channel used to reduce opacity of watermark(reducing brightness
+    #and contrast) by default value of 0.25
     alpha = watermark.split()[3]
     alpha = ImageEnhance.Brightness(alpha).enhance(opacity)
     watermark.putalpha(alpha)
+    #merge watermark image back into original image and save
     Image.composite(watermark, im, watermark).save('watermark.jpg')
 
 # checks to see if two colours are similar to eachother by adding the difference
@@ -114,7 +130,7 @@ def main(argv):
     elif manipType == 'm':
         mirroring(imagePath)
     elif manipType == 'w':
-        watermark(imagePath, 'text')
+        add_watermark(imagePath, 'text')
     elif manipType == 'c':
         reverseChromaKey(imagePath)
     else:
