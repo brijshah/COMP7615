@@ -1,7 +1,21 @@
-import gizeh
-import moviepy.editor as mpy 
-from random import randint
-import imageio
+#!/usr/bin/python
+
+#-----------------------------------------------------------------------------
+#-- SOURCE FILE:    movie.py
+#--
+#-- FUNCTIONS:      makeCircle(t)
+#--                 makeText(t)
+#--                 main()
+#--
+#-- DATE:           October 23, 2015
+#--
+#-- DESIGNERS:      Brij Shah & Callum Styan
+#--
+#-- PROGRAMMERS:    Brij Shah & Callum Styan
+#-----------------------------------------------------------------------------
+
+import gizeh, imageio, argparse
+import moviepy.editor as mpy
 
 W, H = 500, 300
 DURATION = 2
@@ -14,17 +28,14 @@ def makeCircle(t):
     circle.draw(surface)
     return surface.get_npimage()
 
-#works on linux, not on mac, fuck
 def makeText(t):
-    img = imageio.imread('tiger.png')
+    img = imageio.imread('bg.png')
     W = img.shape[1]
     H = img.shape[0]
     surface = gizeh.Surface.from_image(img)
-    #surface = gizeh.Surface(W, H)
     x = W * t / DURATION
     y = H * t / DURATION
-    text = gizeh.text("H", fontfamily="Helvetica",  fontsize=5,
-                  fill=(255,255,255), xy=(x,y))
+    text = gizeh.text("H", fontfamily="Helvetica",  fontsize=5, fill=(255,255,255), xy=(x,y))
     text.draw(surface)
     return surface.get_npimage()
 
@@ -33,4 +44,7 @@ def main():
     clip.write_gif("text.gif", fps=30, opt="OptimizePlus", fuzz=10)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print 'Exiting..'
