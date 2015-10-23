@@ -45,13 +45,15 @@ def createBackground(song):
 	background = background.fade_in(8800).fade_out(8800)
 	background.export('background.wav', 'wav')
 
-# pretty girls segment
+# creates snippet from song given and fades in
 def prettyGirls(song):
 	global prettyGirls
 	prettyGirls = song[12050:14800]
 	prettyGirls = prettyGirls.fade_in(1500)
 
-# oh yeah segment
+# creates snippet from song given
+# applies gain to the same snippet 
+# creates three snippets with different volume
 def ohYeah(song):
 	global oyeahs
 	oyeah = song[121800:122400]
@@ -61,7 +63,9 @@ def ohYeah(song):
 	oyeahs = oyeah.append(quiet).append(quieter).append(quietest)
 	oyeahs.export('oyeah.wav', 'wav')
 
-# mars
+# creates snippet from song given
+# opens another snippet from opened wave file
+# attaches two snippets 
 def mars(song):
 	global marsOyeah
 	silent5 = AudioSegment.silent(duration=22000)
@@ -77,7 +81,8 @@ def mars(song):
 	marsFast = AudioSegment.from_wav('marsFast.wav')
 	marsOyeah = silent5.append(marsFast).append(oyeahs).append(silent5)
 
-# drum beat
+# creates snippet from song given
+# overlays all other snippets to drum beat
 def drums(song):
 	global girlsPretty
 	silentStart = AudioSegment.silent(duration=13200)
