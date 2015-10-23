@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
 #-----------------------------------------------------------------------------
-#-- SOURCE FILE:    movie.py
+#-- SOURCE FILE:    tickertape.py
 #--
-#-- FUNCTIONS:      makeCircle(t)
-#--                 makeText(t)
+#-- FUNCTIONS:      makeText(t)
 #--                 main()
 #--
 #-- DATE:           October 23, 2015
@@ -17,25 +16,21 @@
 import gizeh, imageio, argparse
 import moviepy.editor as mpy
 
-W, H = 500, 300
+parser = argparse.ArgumentParser(description='Text Ticker Tape')
+parser.add_argument('-t', '--text', dest='text', help='text to animate', required=True)
+parser.add_argument('-b', '--background', dest='background', help='background image', required=True)
+args = parser.parse_args()
+
 DURATION = 2
 
-def makeCircle(t):
-    surface = gizeh.Surface(W, H)
-    x = W * t / DURATION
-    y = H * t / DURATION
-    circle = gizeh.circle(30, xy=(x,y), fill=(1,0,0))
-    circle.draw(surface)
-    return surface.get_npimage()
-
 def makeText(t):
-    img = imageio.imread('bg.png')
+    img = imageio.imread(args.background)
     W = img.shape[1]
     H = img.shape[0]
     surface = gizeh.Surface.from_image(img)
     x = W * t / DURATION
     y = H * t / DURATION
-    text = gizeh.text("H", fontfamily="Helvetica",  fontsize=5, fill=(255,255,255), xy=(x,y))
+    text = gizeh.text(args.text, fontfamily="Helvetica",  fontsize=5, fill=(255,255,255), xy=(x,y))
     text.draw(surface)
     return surface.get_npimage()
 
